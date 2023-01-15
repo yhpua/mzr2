@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2023-01-16">
+<meta name="dcterms.date" content="2023-01-15">
 
-<title>poma updated</title>
+<title>Bayesian MZ Rsquared</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2615,11 +2615,11 @@ vertical-align: -.125em;
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
 </div>
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">poma updated</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Bayesian MZ Rsquared</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -2630,7 +2630,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 16, 2023</p>
+      <p class="date">January 15, 2023</p>
     </div>
   </div>
   
@@ -2640,353 +2640,159 @@ vertical-align: -.125em;
 
 </header>
 
-<div class="cell">
-
+<div class="cell" data-hash="MZ-R2_cache/html/unnamed-chunk-1_a296fab1b766aa3077ee9634ad380204">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rms)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rmsb)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;scipen&quot;</span><span class="ot">=</span> <span class="dv">4</span>, <span class="at">digits =</span> <span class="dv">4</span>) </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>R2mz <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, <span class="at">ci =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#&#39; McKelvey &amp; Zavoina (1975) https://doi.org/10/dqfhpp</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#&#39; Modified from codes written by Andrew Milne (https://github.com/paul-buerkner/brms/issues/639)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  y_pred  <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">&quot;lp&quot;</span>, <span class="at">posterior.summary =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  var_fit <span class="ot">&lt;-</span> <span class="fu">apply</span>(y_pred, <span class="dv">1</span>, var)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  var_res <span class="ot">&lt;-</span> pi<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">3</span> </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  R2_mz   <span class="ot">&lt;-</span> var_fit <span class="sc">/</span> (var_fit <span class="sc">+</span> var_res)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">median_hdci</span>(R2_mz, <span class="at">.width =</span> ci)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="short-ordinal-response-variable" class="level2">
 <h2 class="anchored" data-anchor-id="short-ordinal-response-variable">Short Ordinal Response Variable</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">hp=</span><span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">180</span>), <span class="at">vs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>mod.orm <span class="ot">&lt;-</span> <span class="fu">orm</span>(cyl <span class="sc">~</span> vs <span class="sc">+</span> hp , <span class="at">x=</span><span class="cn">TRUE</span>, <span class="at">y=</span><span class="cn">TRUE</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">poma</span>(mod.orm)  <span class="do">## prompts user to use rms::impactPO</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="MZ-R2_cache/html/unnamed-chunk-2_c551ab67068954ee4acaa0e73bc98535">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>short_orm  <span class="ot">&lt;-</span> <span class="fu">orm</span>(gear   <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">data =</span> mtcars, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>short_blrm <span class="ot">&lt;-</span> <span class="fu">blrm</span>(gear  <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">iter =</span> <span class="dv">3000</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>short_orm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Unique values of Y: 4 6 8 
-Please use rms::impactPO for a more rigorous assessment of the PO assumption (https://www.fharrell.com/post/impactpo/)  
-
-Cut-point for continuous DV refers to observed Y values 
-rms-368: glm cloglog on Prob[Y&lt;j] is log-log on Prob{Y&gt;=j} 
-    link cut.value slope
-   logit         6 -2.15
-   logit         8 -5.06
-  probit         6 -1.23
-  probit         8 -2.93
- cloglog         6 -1.88
- cloglog         8 -4.07</code></pre>
+<pre><code>Logistic (Proportional Odds) Ordinal Regression Model
+ 
+ orm(formula = gear ~ am + disp, data = mtcars, x = TRUE, y = TRUE)
+ 
+                       Model Likelihood               Discrimination    Rank Discrim.    
+                             Ratio Test                      Indexes          Indexes    
+ Obs           32    LR chi2      29.02    R2                  0.687    rho     0.791    
+  3            15    d.f.             2    R2(2,32)            0.570                     
+  4            12    Pr(&gt; chi2) &lt;0.0001    R2(2,26.9)          0.634                     
+  5             5    Score chi2   23.12    |Pr(Y&gt;=median)-0.5| 0.375                     
+ Distinct Y     3    Pr(&gt; chi2) &lt;0.0001                                                  
+ Median Y       4                                                                        
+ max |deriv| 0.03                                                                        
+ 
+      Coef     S.E.    Wald Z Pr(&gt;|Z|)
+ y&gt;=4  -0.0796  1.3161 -0.06  0.9518  
+ y&gt;=5 -10.5395 37.3467 -0.28  0.7778  
+ am    10.6954 37.3328  0.29  0.7745  
+ disp  -0.0045  0.0045 -0.99  0.3201  
+ </code></pre>
 </div>
-<div class="cell-output-display">
-<p><img src="data:image/png;base64,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" class="img-fluid" width="672"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">poma</span>(mod.orm, <span class="at">newdata =</span> d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>short_blrm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Unique values of Y: 4 6 8 
- ##-------------------##
- ## impactPO 
- ##-------------------##
-                          PO    Multinomial
-Deviance                  19.03 16.38      
-d.f.                      4     6          
-AIC                       27.03 28.38      
-p                         2     4          
-LR chi^2                  48.89 51.53      
-LR - p                    46.89 47.53      
-LR chi^2 test for PO            2.65       
-  d.f.                           2         
-  Pr(&gt;chi^2)                    0.2661     
-MCS R2                    0.783 0.800      
-MCS R2 adj                0.769 0.774      
-McFadden R2               0.720 0.759      
-McFadden R2 adj           0.661 0.641      
-Mean |difference| from PO       0.208      
-
-Covariate combination-specific mean |difference| in predicted probabilities
-
-       method  hp vs Mean |difference|
-1 Multinomial  90  0             0.165
-2 Multinomial 180  0             0.030
-3 Multinomial  90  1             0.055
-4 Multinomial 180  1             0.582
-
-
-
- ##-------------------##
- ## Constancy of slopes 
- ##-------------------##
-Cut-point for continuous DV refers to observed Y values 
-rms-368: glm cloglog on Prob[Y&lt;j] is log-log on Prob{Y&gt;=j} 
-    link cut.value slope
-   logit         6 -2.15
-   logit         8 -5.06
-  probit         6 -1.23
-  probit         8 -2.93
- cloglog         6 -1.88
- cloglog         8 -4.07</code></pre>
+<pre><code>Bayesian Proportional Odds Ordinal Logistic Model
+ 
+ Dirichlet Priors With Concentration Parameter 0.541 for Intercepts
+ 
+ blrm(formula = gear ~ am + disp, data = mtcars, iter = 3000)
+ 
+                  Mixed Calibration/               Discrimination               Rank Discrim.    
+              Discrimination Indexes                      Indexes                     Indexes    
+    Obs 32    LOO log L-22.23+/-3.29    g    3.744 [1.585, 5.941]    C   0.877 [0.794, 0.889]    
+     3  15    LOO IC    44.46+/-6.58    gp    0.422 [0.327, 0.49]    Dxy 0.755 [0.587, 0.778]    
+     4  12    Effective p4.13+/-1.12    EV    0.624 [0.383, 0.85]                                
+     5   5    B 0.083 [0.051, 0.117]    v  13.193 [1.635, 28.342]                                
+ Draws6000                              vp   0.157 [0.092, 0.215]                                
+   Chains4                                                                                       
+    p    2                                                                                       
+ 
+      Mode Beta Mean Beta Median Beta S.E.   Lower    Upper   Pr(Beta&gt;0)
+ y&gt;=4 -0.0789   -0.0124   -0.0312     1.3589  -2.6043  2.6706 0.4908    
+ y&gt;=5 -8.2614   -5.5371   -5.2716     2.6152 -10.7468 -0.7529 0.0027    
+ am    8.4152    5.8234    5.4778     2.4102   1.6266 10.6899 1.0000    
+ disp -0.0045   -0.0052   -0.0049     0.0047  -0.0150  0.0034 0.1303    
+      Symmetry
+ y&gt;=4 0.98    
+ y&gt;=5 0.68    
+ am   1.62    
+ disp 0.87    
+ </code></pre>
 </div>
-<div class="cell-output-display">
-<p><img src="data:image/png;base64,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" class="img-fluid" width="672"></p>
+</div>
+<div class="cell" data-hash="MZ-R2_cache/html/unnamed-chunk-3_bb75d1165f4c1d66c6b740798ac2053b">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>short_orm<span class="sc">$</span>stats[<span class="fu">grepl</span>(<span class="st">&quot;r2&quot;</span>, <span class="fu">names</span>(short_orm<span class="sc">$</span>stats), <span class="at">ignore.case =</span> <span class="cn">TRUE</span> )]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        R2     R2(32)   R2(2,32)   R2(26.9) R2(2,26.9) 
+ 0.6867716  0.5962167  0.5701749  0.6600756  0.6338336 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">R2mz</span>(short_blrm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          y      ymin      ymax .width .point .interval
+1 0.7546043 0.5003245 0.9500575   0.95 median      hdci</code></pre>
 </div>
 </div>
 </section>
-<section id="long-ordinalcontinuous-response-variable" class="level2 page-columns page-full">
+<section id="long-ordinalcontinuous-response-variable" class="level2">
 <h2 class="anchored" data-anchor-id="long-ordinalcontinuous-response-variable">Long ordinal/continuous Response Variable</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">hp=</span><span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">180</span>), <span class="at">cyl =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mod.orm <span class="ot">&lt;-</span> <span class="fu">orm</span>(mpg <span class="sc">~</span> cyl <span class="sc">+</span> hp , <span class="at">x=</span><span class="cn">TRUE</span>, <span class="at">y=</span><span class="cn">TRUE</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">poma</span>(mod.orm, <span class="at">newdata =</span> d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="MZ-R2_cache/html/unnamed-chunk-4_5fc3563bb9d6e09484a36347588fefe9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>long_orm  <span class="ot">&lt;-</span> <span class="fu">orm</span>(mpg   <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">data =</span> mtcars, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>long_blrm <span class="ot">&lt;-</span> <span class="fu">blrm</span>(mpg  <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">iter =</span> <span class="dv">3000</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>long_orm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Unique values of Y: 10.4 13.3 14.3 14.7 15 15.2 15.5 15.8 16.4 17.3 17.8 18.1 18.7 19.2 19.7 21 21.4 21.5 22.8 24.4 26 27.3 30.4 32.4 33.9 
-to use rms::impactPO, please supply discrete Y with at least 5 obs at each level 
-Cut-point for continuous DV refers to observed Y values 
-rms-368: glm cloglog on Prob[Y&lt;j] is log-log on Prob{Y&gt;=j} 
-    link cut.value slope
-   logit      15.5 -1.14
-   logit      18.7 -0.52
-   logit      22.8 -5.13
-  probit      15.5 -0.64
-  probit      18.7 -0.31
-  probit      22.8 -3.00
- cloglog      15.5 -0.71
- cloglog      18.7 -0.38
- cloglog      22.8 -3.94</code></pre>
+<pre><code>Logistic (Proportional Odds) Ordinal Regression Model
+ 
+ orm(formula = mpg ~ am + disp, data = mtcars, x = TRUE, y = TRUE)
+ 
+                        Model Likelihood               Discrimination    Rank Discrim.    
+                              Ratio Test                      Indexes          Indexes    
+ Obs            32    LR chi2      49.57    R2                  0.789    rho     0.905    
+ Distinct Y     25    d.f.             2    R2(2,32)            0.774                     
+ Median Y     19.2    Pr(&gt; chi2) &lt;0.0001    R2(2,31.9)          0.775                     
+ max |deriv| 8e-05    Score chi2   44.71    |Pr(Y&gt;=median)-0.5| 0.420                     
+                      Pr(&gt; chi2) &lt;0.0001                                                  
+ 
+      Coef    S.E.   Wald Z Pr(&gt;|Z|)
+ am    0.4413 0.7959  0.55  0.5792  
+ disp -0.0297 0.0061 -4.88  &lt;0.0001 
+ </code></pre>
 </div>
-<div class="cell-output-display">
-<p><img src="data:image/png;base64,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" class="img-fluid" width="672"></p>
-</div>
-</div>
-<div class="callout-tip column-page callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Updated poma.R
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Examine proportional odds and parallelism assumptions of `orm` and `lrm` model fits.</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Based on codes and strategies from Frank Harrell&#39;s canonical `Regression Modeling Strategies` text</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 1: Compare PO model fit with models that relax the PO assumption (for discrete response variable) \cr</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 2: Apply different link functions to Prob of Binary Ys (defined by cutval). Regress transformed outcome on combined X and assess constancy of slopes (betas) across cut-points \cr</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 3: Generate score residual plot for each predictor (for response variable with &lt;10 unique levels) \cr</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 4: Assess parallelism of link function transformed inverse CDFs curves for different XBeta levels (for response variables with &gt;=10 unique levels)</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param mod.orm Model fit of class `orm` or `lrm`. For `fit.mult.impute` objects, `poma` will refit model on a singly-imputed data-set</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param cutval Numeric vector; sequence of observed values to cut outcome</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param ... parameters to pass to `impactPO` function such as `newdata`, `nonpo`, and `B`.</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @author Yong Hao Pua &lt;puayonghao@gmail.com&gt;</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @import rms</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @seealso Harrell FE. *Regression Modeling Strategies: with applications to linear models,</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; logistic and ordinal regression, and survival analysis.* New York: Springer Science, LLC, 2015. \cr</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Harrell FE. Statistical Thinking - Assessing the Proportional Odds Assumption and Its Impact. https://www.fharrell.com/post/impactpo/. Published March 9, 2022. Accessed January 13, 2023.</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; [rms::impactPO()] \cr</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @examples</span></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;\dontrun{</span></span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;## orm model (response variable has fewer than 10 unique levels)</span></span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;mod.orm &lt;- orm(carb ~ cyl + hp , x = TRUE, y = TRUE, data = mtcars)</span></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;poma(mod.orm)</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;## runs rms::impactPO when its args are supplied</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;d &lt;- expand.grid(hp = c(90, 180), vs = c(0, 1))</span></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;mod.orm &lt;- orm(cyl ~ vs + hp , x = TRUE, y = TRUE, data = mtcars)</span></span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;poma(mod.orm, newdata = d)</span></span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;## orm model (response variable has &gt;=10 unique levels)</span></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;mod.orm &lt;- orm(mpg ~ cyl + hp , x=TRUE, y=TRUE, data = mtcars)</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;poma(mod.orm)</span></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ## orm model using imputation</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; dat &lt;- mtcars</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ## introduce NAs</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; dat[sample(rownames(dat), 10), &quot;cyl&quot;] &lt;- NA</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; im &lt;- aregImpute(~ cyl + wt + mpg + am, data = dat)</span></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; aa &lt;- fit.mult.impute(mpg ~ cyl + wt , xtrans = im, data = dat, fitter = orm)</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; poma(aa)</span></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; }</span></span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>poma <span class="ot">&lt;-</span> <span class="cf">function</span>(mod.orm, cutval, ...) {</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Ensure that lrm and orm objects are supplied</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">any</span>(<span class="fu">class</span>(mod.orm) <span class="sc">%in%</span> <span class="fu">Cs</span>(lrm, orm))) {</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&#39;rms object must be of class lrm or orm&#39;</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  <span class="do">## (Re-)create mod.orm from a singly-imputed dataset</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">any</span>(<span class="fu">class</span>(mod.orm) <span class="sc">%in%</span> <span class="fu">Cs</span>(fit.mult.impute) )) {</span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Refitting model on a singly-imputed dataset </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    fit_mult_call <span class="ot">&lt;-</span>  <span class="fu">as.character</span>(mod.orm<span class="sc">$</span>call)</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    myformula <span class="ot">&lt;-</span>      fit_mult_call[[<span class="dv">2</span>]]</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    myfitter <span class="ot">&lt;-</span>       fit_mult_call[[<span class="dv">3</span>]]</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    myaregimpute <span class="ot">&lt;-</span>   fit_mult_call[[<span class="dv">4</span>]]</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    mydata <span class="ot">&lt;-</span>         fit_mult_call[[<span class="dv">5</span>]]</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extract imputed values</span></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    imputed <span class="ot">&lt;-</span> <span class="fu">impute.transcan</span>(<span class="at">x =</span> <span class="fu">get</span>(myaregimpute), <span class="at">imputation =</span> <span class="dv">1</span>, <span class="at">data =</span> <span class="fu">get</span>(mydata),  <span class="at">list.out =</span> <span class="cn">TRUE</span>, <span class="at">pr =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create one imputed dataset</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    imputed_df <span class="ot">&lt;-</span> <span class="fu">get</span>(mydata)</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    imputed_df[<span class="fu">names</span>(imputed)] <span class="ot">&lt;-</span> imputed</span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    <span class="co"># recreate model</span></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mod.orm &lt;- eval(parse(text = sprintf(&quot; %s(%s, x = T, y = T, data = imputed_df)&quot;, myfitter, myformula)))</span></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>    mod.orm <span class="ot">&lt;-</span> <span class="fu">do.call</span> (myfitter, <span class="fu">list</span> (<span class="at">formula =</span> <span class="fu">as.formula</span>(myformula), <span class="at">data =</span> imputed_df, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Ensure mod.orm fit uses x = T and y = T</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(mod.orm<span class="sc">$</span>y) <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">length</span>(mod.orm<span class="sc">$</span>x) <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;fit did not use x = TRUE, y = TRUE&quot;</span>)</span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Generate dataset with no missing values</span></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">=</span> mod.orm<span class="sc">$</span>call<span class="sc">$</span>data</span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">=</span> <span class="fu">eval</span> (data) [ , <span class="fu">all.vars</span>(mod.orm<span class="sc">$</span>sformula)]</span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data [<span class="fu">complete.cases</span>(data), ]</span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Convert DV into numeric vector when factor DV is supplied</span></span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>  mydv <span class="ot">&lt;-</span>   <span class="fu">eval</span> (data) [ , <span class="fu">all.vars</span>(mod.orm<span class="sc">$</span>sformula)[<span class="dv">1</span>] ]</span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Unique values of Y:&quot;</span>, <span class="fu">unique</span>(<span class="fu">sort</span>(mydv)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>  <span class="do">### impactPO() for discrete Y</span></span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>  dots <span class="ot">&lt;-</span> <span class="fu">list</span>(...)</span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>  impactPO_argnames  <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">formals</span>(impactPO))</span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>  impactPO_args_sub  <span class="ot">&lt;-</span> impactPO_argnames[impactPO_argnames <span class="sc">%nin%</span> <span class="fu">c</span>(<span class="st">&quot;formula&quot;</span>, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;...&quot;</span>)]</span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>  <span class="co"># User desires to use rms::impactPO</span></span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure discrete Y (with no low-prevalence levels) is supplied</span></span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( <span class="fu">any</span>(<span class="fu">names</span>(dots) <span class="sc">%in%</span> impactPO_args_sub ) )  {</span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> (<span class="fu">any</span>(mod.orm<span class="sc">$</span>freq <span class="sc">&lt;</span> <span class="dv">5</span>)) {</span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>         <span class="fu">cat</span>(<span class="st">&#39;to use rms::impactPO, please supply discrete Y with at least 5 obs at each level </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>       } <span class="cf">else</span> {</span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>        impactPO_args_dots    <span class="ot">&lt;-</span> dots [<span class="fu">names</span>(dots) <span class="sc">%in%</span> impactPO_args_sub]</span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>        impactPO_args_default <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">formula =</span> mod.orm<span class="sc">$</span>sformula, <span class="at">data =</span> data)  <span class="do">## default args</span></span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>        impactPO_args         <span class="ot">&lt;-</span> <span class="fu">modifyList</span>(impactPO_args_default, impactPO_args_dots)</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>        w <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;impactPO&quot;</span>, impactPO_args)</span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">&quot; ##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;## impactPO </span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span> (w)</span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span> (<span class="st">&quot;</span><span class="sc">\n\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">&quot; ##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;## Constancy of slopes </span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>       }</span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Direct users to rms::impactPO() for models fitted on discrete Y</span></span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">all</span>(mod.orm<span class="sc">$</span>freq <span class="sc">&gt;</span> <span class="dv">5</span>)) {</span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">&#39;Please use rms::impactPO for a more rigorous assessment of the PO assumption (https://www.fharrell.com/post/impactpo/)  </span><span class="sc">\n\n</span><span class="st">&#39;</span>)</span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Compute combined predictor (X) values</span></span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">any</span>(<span class="fu">class</span>(mydv) <span class="sc">%in%</span> <span class="st">&quot;factor&quot;</span>) ) {</span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>    aa <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;as.numeric(&quot;</span>, mod.orm<span class="sc">$</span>terms[[<span class="dv">2</span>]], <span class="st">&quot;) ~&quot;</span>)</span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>    rhs <span class="ot">&lt;-</span> mod.orm<span class="sc">$</span>terms[[<span class="dv">3</span>]]</span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>    bb <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">deparse</span>(rhs), <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>    newformula <span class="ot">&lt;-</span> <span class="fu">paste</span>(aa, bb)</span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n\n\n</span><span class="st"> Formula used with non-numeric DV:&quot;</span>, newformula, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st"> Cut-point for factor DV refers to the jth levels - not observed Y values </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>    mod.ols <span class="ot">&lt;-</span> <span class="fu">ols</span>(<span class="fu">as.formula</span>(newformula) , <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>, <span class="at">data =</span> <span class="fu">eval</span>(data))</span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Cut-point for continuous DV refers to observed Y values </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    mod.ols <span class="ot">&lt;-</span>  <span class="fu">ols</span>(<span class="fu">formula</span>(mod.orm), <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>, <span class="at">data =</span> <span class="fu">eval</span>(data))</span>
-<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>  combined_x <span class="ot">&lt;-</span> <span class="fu">fitted</span>(mod.ols)</span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Set cutpoint values for Y</span></span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>  <span class="do">### for factor DV: cutpoints = 2 to max no. of levels (jth levels)</span></span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>  <span class="do">### for continuous DV: cutpoints = y unique values (quartiles for truly continuous response var)</span></span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(cutval)) {</span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">class</span>(mydv) <span class="sc">%in%</span> <span class="st">&quot;factor&quot;</span>)) cutval <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2</span>, <span class="fu">length</span>(<span class="fu">unique</span>(mydv)))</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span>( <span class="fu">length</span>(<span class="fu">unique</span>(mydv)) <span class="sc">&lt;=</span> <span class="dv">10</span> ) cutval <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sort</span>(mydv))[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> cutval <span class="ot">&lt;-</span> <span class="fu">quantile</span>(<span class="fu">unique</span>(mydv), <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="do">## quartiles as cutpoints for continuous DV</span></span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Apply link functions to Prob of Binary Y (defined by cutval)</span></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Regress transformed outcome as a function of combined X. Check for constancy of slopes</span></span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Codes taken from rms p368</span></span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (link <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;logit&quot;</span>, <span class="st">&quot;probit&quot;</span>, <span class="st">&quot;cloglog&quot;</span>)) {</span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> cutval) {</span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>      co <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">suppressWarnings</span>(</span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>        <span class="fu">glm</span>(mod.ols<span class="sc">$</span>y <span class="sc">&lt;</span> k <span class="sc">~</span> combined_x, <span class="at">family =</span> <span class="fu">binomial</span>(link))</span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>        ))</span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>      r <span class="ot">&lt;-</span>  <span class="fu">rbind</span>(r, <span class="fu">data.frame</span> (<span class="at">link=</span>link, <span class="at">cut.value =</span> k, <span class="at">slope =</span> <span class="fu">round</span>(co[<span class="dv">2</span>],<span class="dv">2</span>)))</span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;rms-368: glm cloglog on Prob[Y&lt;j] is log-log on Prob{Y&gt;=j} </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(r, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Graphical Assessment</span></span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>  numpred <span class="ot">&lt;-</span> <span class="fu">dim</span>(mod.orm<span class="sc">$</span>x)[[<span class="dv">2</span>]]</span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(<span class="fu">unique</span>(mod.orm<span class="sc">$</span>y)) <span class="sc">&lt;</span> <span class="dv">10</span>) {</span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">ask=</span><span class="cn">TRUE</span>)</span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Generate Score residual plot for each predictor/terms</span></span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>    <span class="do">## n2mfrow() to control par(mfrow) setting</span></span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>    numpred <span class="ot">&lt;-</span> <span class="fu">dim</span>(mod.orm<span class="sc">$</span>x)[[<span class="dv">2</span>]]</span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">rev</span>(grDevices<span class="sc">::</span><span class="fu">n2mfrow</span>(numpred)))</span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>    <span class="fu">resid</span>(mod.orm, <span class="st">&quot;score.binary&quot;</span>, <span class="at">pl=</span><span class="cn">TRUE</span>)</span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">ask=</span>F)</span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Assess parallelism of link function transformed inverse CDFs curves</span></span>
-<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Codes to generate curves are from Harrell&#39;s rms book p368-369</span></span>
-<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="cf">function</span> (fun, row, col) {</span>
-<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>      f <span class="ot">&lt;-</span>  <span class="fu">substitute</span> (fun)</span>
-<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>      g <span class="ot">&lt;-</span>  <span class="cf">function</span> (F) <span class="fu">eval</span>(f)</span>
-<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>      <span class="do">## Number of groups (2 to 5) based on sample size</span></span>
-<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>      ecdfgroups <span class="ot">=</span> <span class="fu">pmax</span>(<span class="dv">2</span>, <span class="fu">pmin</span>(<span class="dv">5</span>, <span class="fu">round</span>( <span class="fu">dim</span>(mod.orm<span class="sc">$</span>x)[[<span class="dv">1</span>]]<span class="sc">/</span><span class="dv">20</span>)))</span>
-<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>      y <span class="ot">=</span> mod.orm<span class="sc">$</span>y</span>
-<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Coerce to numeric if needed</span></span>
-<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">is.factor</span>(y)) {</span>
-<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>        y <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">levels</span>(y))[y]</span>
-<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span>  <span class="fu">Ecdf</span> (<span class="sc">~</span> mod.ols<span class="sc">$</span>y,</span>
-<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>                  <span class="at">groups =</span> <span class="fu">cut2</span>(combined_x, <span class="at">g =</span> ecdfgroups),</span>
-<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fun =</span> <span class="cf">function</span> (F) <span class="fu">g</span>(<span class="dv">1</span> <span class="sc">-</span> F),</span>
-<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlab =</span> <span class="fu">all.vars</span>(mod.ols<span class="sc">$</span>sformula)[[<span class="dv">1</span>]],</span>
-<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ylab =</span> <span class="fu">as.expression</span> (f) ,</span>
-<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fu">quantile</span>(y, <span class="fl">0.10</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="fu">quantile</span>(y, <span class="fl">0.85</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>                  <span class="at">label.curve =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span> (z, <span class="at">split =</span> <span class="fu">c</span>(col, row, <span class="dv">2</span>, <span class="dv">2</span>) , <span class="at">more =</span> row <span class="sc">&lt;</span> <span class="dv">2</span> <span class="sc">|</span> col <span class="sc">&lt;</span> <span class="dv">2</span>)</span>
-<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span> (<span class="at">fun =</span> <span class="fu">log</span> (F<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>F)), <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span> (<span class="at">fun =</span> <span class="fu">qnorm</span>(F), <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span> (<span class="at">fun =</span> <span class="fu">log</span> (<span class="sc">-</span><span class="fu">log</span> (<span class="dv">1</span><span class="sc">-</span>F)), <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span>( <span class="at">fun =</span> <span class="sc">-</span><span class="fu">log</span> (<span class="sc">-</span><span class="fu">log</span> (F)), <span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>long_blrm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Bayesian Proportional Odds Ordinal Logistic Model
+ 
+ Dirichlet Priors With Concentration Parameter 0.105 for Intercepts
+ 
+ blrm(formula = mpg ~ am + disp, data = mtcars, iter = 3000)
+ 
+ 
+ Frequencies of Responses
+ 
+ 10.4 13.3 14.3 14.7   15 15.2 15.5 15.8 16.4 17.3 17.8 18.1 18.7 19.2 19.7   21 
+    2    1    1    1    1    2    1    1    1    1    1    1    1    2    1    2 
+ 21.4 21.5 22.8 24.4   26 27.3 30.4 32.4 33.9 
+    2    1    2    1    1    1    2    1    1 
+ 
+                   Mixed Calibration/               Discrimination               Rank Discrim.    
+               Discrimination Indexes                      Indexes                     Indexes    
+    Obs 32    LOO log L-119.54+/-8.23    g    4.315 [2.774, 5.714]    C    0.88 [0.866, 0.893]    
+ Draws6000     LOO IC  239.08+/-16.47    gp   0.469 [0.435, 0.504]    Dxy 0.759 [0.731, 0.785]    
+   Chains4    Effective p42.83+/-3.88    EV   0.718 [0.573, 0.841]                                
+    p    2     B  0.089 [0.08, 0.104]    v  14.448 [5.477, 24.015]                                
+                                         vp   0.182 [0.146, 0.216]                                
+ 
+      Mode Beta Mean Beta Median Beta S.E.   Lower   Upper   Pr(Beta&gt;0) Symmetry
+ am    0.4409    0.4205    0.4152     0.8082 -1.1306  2.0771 0.6997     1.03    
+ disp -0.0297   -0.0292   -0.0289     0.0058 -0.0413 -0.0185 0.0000     0.86    
+ </code></pre>
 </div>
 </div>
+<div class="cell" data-hash="MZ-R2_cache/html/unnamed-chunk-5_fa4649c584bc0aca71fe6c7c45782845">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>long_orm<span class="sc">$</span>stats[<span class="fu">grepl</span>(<span class="st">&quot;r2&quot;</span>, <span class="fu">names</span>(long_orm<span class="sc">$</span>stats), <span class="at">ignore.case =</span> <span class="cn">TRUE</span> )]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        R2     R2(32)   R2(2,32)   R2(31.9) R2(2,31.9) 
+ 0.7889624  0.7875494  0.7738475  0.7882930  0.7746071 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">R2mz</span>(long_blrm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          y      ymin      ymax .width .point .interval
+1 0.8076323 0.6758245 0.9013393   0.95 median      hdci</code></pre>
 </div>
 </div>
 <!-- -->
@@ -3179,293 +2985,77 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;poma updated&quot;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;`r format(Sys.time(), &#39;%d %B, %Y&#39;)`&quot;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">    html-math-method: katex</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-location: left</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: FALSE</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rms)</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;poma.R&quot;</span>)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Short Ordinal Response Variable</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">hp=</span><span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">180</span>), <span class="at">vs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>mod.orm <span class="ot">&lt;-</span> <span class="fu">orm</span>(cyl <span class="sc">~</span> vs <span class="sc">+</span> hp , <span class="at">x=</span><span class="cn">TRUE</span>, <span class="at">y=</span><span class="cn">TRUE</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="fu">poma</span>(mod.orm)  <span class="do">## prompts user to use rms::impactPO</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="fu">poma</span>(mod.orm, <span class="at">newdata =</span> d)</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Long ordinal/continuous Response Variable</span></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">hp=</span><span class="fu">c</span>(<span class="dv">90</span>, <span class="dv">180</span>), <span class="at">cyl =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">6</span>))</span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>mod.orm <span class="ot">&lt;-</span> <span class="fu">orm</span>(mpg <span class="sc">~</span> cyl <span class="sc">+</span> hp , <span class="at">x=</span><span class="cn">TRUE</span>, <span class="at">y=</span><span class="cn">TRUE</span>, <span class="at">data =</span> mtcars)</span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">poma</span>(mod.orm, <span class="at">newdata =</span> d)</span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>:::{.callout-tip .column-page collapse=&quot;true&quot;}</span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## Updated poma.R</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Examine proportional odds and parallelism assumptions of `orm` and `lrm` model fits.</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Based on codes and strategies from Frank Harrell&#39;s canonical `Regression Modeling Strategies` text</span></span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 1: Compare PO model fit with models that relax the PO assumption (for discrete response variable) \cr</span></span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 2: Apply different link functions to Prob of Binary Ys (defined by cutval). Regress transformed outcome on combined X and assess constancy of slopes (betas) across cut-points \cr</span></span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 3: Generate score residual plot for each predictor (for response variable with &lt;10 unique levels) \cr</span></span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Strategy 4: Assess parallelism of link function transformed inverse CDFs curves for different XBeta levels (for response variables with &gt;=10 unique levels)</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param mod.orm Model fit of class `orm` or `lrm`. For `fit.mult.impute` objects, `poma` will refit model on a singly-imputed data-set</span></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param cutval Numeric vector; sequence of observed values to cut outcome</span></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param ... parameters to pass to `impactPO` function such as `newdata`, `nonpo`, and `B`.</span></span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @author Yong Hao Pua &lt;puayonghao@gmail.com&gt;</span></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @import rms</span></span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @seealso Harrell FE. *Regression Modeling Strategies: with applications to linear models,</span></span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; logistic and ordinal regression, and survival analysis.* New York: Springer Science, LLC, 2015. \cr</span></span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Harrell FE. Statistical Thinking - Assessing the Proportional Odds Assumption and Its Impact. https://www.fharrell.com/post/impactpo/. Published March 9, 2022. Accessed January 13, 2023.</span></span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; [rms::impactPO()] \cr</span></span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @examples</span></span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;\dontrun{</span></span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;## orm model (response variable has fewer than 10 unique levels)</span></span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;mod.orm &lt;- orm(carb ~ cyl + hp , x = TRUE, y = TRUE, data = mtcars)</span></span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;poma(mod.orm)</span></span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;## runs rms::impactPO when its args are supplied</span></span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;d &lt;- expand.grid(hp = c(90, 180), vs = c(0, 1))</span></span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;mod.orm &lt;- orm(cyl ~ vs + hp , x = TRUE, y = TRUE, data = mtcars)</span></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;poma(mod.orm, newdata = d)</span></span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;## orm model (response variable has &gt;=10 unique levels)</span></span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;mod.orm &lt;- orm(mpg ~ cyl + hp , x=TRUE, y=TRUE, data = mtcars)</span></span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;poma(mod.orm)</span></span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ## orm model using imputation</span></span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; dat &lt;- mtcars</span></span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ## introduce NAs</span></span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; dat[sample(rownames(dat), 10), &quot;cyl&quot;] &lt;- NA</span></span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; im &lt;- aregImpute(~ cyl + wt + mpg + am, data = dat)</span></span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; aa &lt;- fit.mult.impute(mpg ~ cyl + wt , xtrans = im, data = dat, fitter = orm)</span></span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; poma(aa)</span></span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; }</span></span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>poma <span class="ot">&lt;-</span> <span class="cf">function</span>(mod.orm, cutval, ...) {</span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Ensure that lrm and orm objects are supplied</span></span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">any</span>(<span class="fu">class</span>(mod.orm) <span class="sc">%in%</span> <span class="fu">Cs</span>(lrm, orm))) {</span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&#39;rms object must be of class lrm or orm&#39;</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>  <span class="do">## (Re-)create mod.orm from a singly-imputed dataset</span></span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">any</span>(<span class="fu">class</span>(mod.orm) <span class="sc">%in%</span> <span class="fu">Cs</span>(fit.mult.impute) )) {</span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Refitting model on a singly-imputed dataset </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>    fit_mult_call <span class="ot">&lt;-</span>  <span class="fu">as.character</span>(mod.orm<span class="sc">$</span>call)</span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>    myformula <span class="ot">&lt;-</span>      fit_mult_call[[<span class="dv">2</span>]]</span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>    myfitter <span class="ot">&lt;-</span>       fit_mult_call[[<span class="dv">3</span>]]</span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>    myaregimpute <span class="ot">&lt;-</span>   fit_mult_call[[<span class="dv">4</span>]]</span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a>    mydata <span class="ot">&lt;-</span>         fit_mult_call[[<span class="dv">5</span>]]</span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extract imputed values</span></span>
-<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a>    imputed <span class="ot">&lt;-</span> <span class="fu">impute.transcan</span>(<span class="at">x =</span> <span class="fu">get</span>(myaregimpute), <span class="at">imputation =</span> <span class="dv">1</span>, <span class="at">data =</span> <span class="fu">get</span>(mydata),  <span class="at">list.out =</span> <span class="cn">TRUE</span>, <span class="at">pr =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create one imputed dataset</span></span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>    imputed_df <span class="ot">&lt;-</span> <span class="fu">get</span>(mydata)</span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>    imputed_df[<span class="fu">names</span>(imputed)] <span class="ot">&lt;-</span> imputed</span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>    <span class="co"># recreate model</span></span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mod.orm &lt;- eval(parse(text = sprintf(&quot; %s(%s, x = T, y = T, data = imputed_df)&quot;, myfitter, myformula)))</span></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>    mod.orm <span class="ot">&lt;-</span> <span class="fu">do.call</span> (myfitter, <span class="fu">list</span> (<span class="at">formula =</span> <span class="fu">as.formula</span>(myformula), <span class="at">data =</span> imputed_df, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Ensure mod.orm fit uses x = T and y = T</span></span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(mod.orm<span class="sc">$</span>y) <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">length</span>(mod.orm<span class="sc">$</span>x) <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;fit did not use x = TRUE, y = TRUE&quot;</span>)</span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Generate dataset with no missing values</span></span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">=</span> mod.orm<span class="sc">$</span>call<span class="sc">$</span>data</span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">=</span> <span class="fu">eval</span> (data) [ , <span class="fu">all.vars</span>(mod.orm<span class="sc">$</span>sformula)]</span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> data [<span class="fu">complete.cases</span>(data), ]</span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Convert DV into numeric vector when factor DV is supplied</span></span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>  mydv <span class="ot">&lt;-</span>   <span class="fu">eval</span> (data) [ , <span class="fu">all.vars</span>(mod.orm<span class="sc">$</span>sformula)[<span class="dv">1</span>] ]</span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;Unique values of Y:&quot;</span>, <span class="fu">unique</span>(<span class="fu">sort</span>(mydv)), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>  <span class="do">### impactPO() for discrete Y</span></span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>  dots <span class="ot">&lt;-</span> <span class="fu">list</span>(...)</span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>  impactPO_argnames  <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">formals</span>(impactPO))</span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>  impactPO_args_sub  <span class="ot">&lt;-</span> impactPO_argnames[impactPO_argnames <span class="sc">%nin%</span> <span class="fu">c</span>(<span class="st">&quot;formula&quot;</span>, <span class="st">&quot;data&quot;</span>, <span class="st">&quot;...&quot;</span>)]</span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>  <span class="co"># User desires to use rms::impactPO</span></span>
-<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure discrete Y (with no low-prevalence levels) is supplied</span></span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>( <span class="fu">any</span>(<span class="fu">names</span>(dots) <span class="sc">%in%</span> impactPO_args_sub ) )  {</span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>     <span class="cf">if</span> (<span class="fu">any</span>(mod.orm<span class="sc">$</span>freq <span class="sc">&lt;</span> <span class="dv">5</span>)) {</span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>         <span class="fu">cat</span>(<span class="st">&#39;to use rms::impactPO, please supply discrete Y with at least 5 obs at each level </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>       } <span class="cf">else</span> {</span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a>        impactPO_args_dots    <span class="ot">&lt;-</span> dots [<span class="fu">names</span>(dots) <span class="sc">%in%</span> impactPO_args_sub]</span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>        impactPO_args_default <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">formula =</span> mod.orm<span class="sc">$</span>sformula, <span class="at">data =</span> data)  <span class="do">## default args</span></span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>        impactPO_args         <span class="ot">&lt;-</span> <span class="fu">modifyList</span>(impactPO_args_default, impactPO_args_dots)</span>
-<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>        w <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;impactPO&quot;</span>, impactPO_args)</span>
-<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">&quot; ##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;## impactPO </span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span> (w)</span>
-<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span> (<span class="st">&quot;</span><span class="sc">\n\n\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">&quot; ##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;## Constancy of slopes </span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;##-------------------##</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>       }</span>
-<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Direct users to rms::impactPO() for models fitted on discrete Y</span></span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">all</span>(mod.orm<span class="sc">$</span>freq <span class="sc">&gt;</span> <span class="dv">5</span>)) {</span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">&#39;Please use rms::impactPO for a more rigorous assessment of the PO assumption (https://www.fharrell.com/post/impactpo/)  </span><span class="sc">\n\n</span><span class="st">&#39;</span>)</span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Compute combined predictor (X) values</span></span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">any</span>(<span class="fu">class</span>(mydv) <span class="sc">%in%</span> <span class="st">&quot;factor&quot;</span>) ) {</span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>    aa <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;as.numeric(&quot;</span>, mod.orm<span class="sc">$</span>terms[[<span class="dv">2</span>]], <span class="st">&quot;) ~&quot;</span>)</span>
-<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>    rhs <span class="ot">&lt;-</span> mod.orm<span class="sc">$</span>terms[[<span class="dv">3</span>]]</span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>    bb <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">deparse</span>(rhs), <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>    newformula <span class="ot">&lt;-</span> <span class="fu">paste</span>(aa, bb)</span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n\n\n</span><span class="st"> Formula used with non-numeric DV:&quot;</span>, newformula, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st"> Cut-point for factor DV refers to the jth levels - not observed Y values </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>    mod.ols <span class="ot">&lt;-</span> <span class="fu">ols</span>(<span class="fu">as.formula</span>(newformula) , <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>, <span class="at">data =</span> <span class="fu">eval</span>(data))</span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Cut-point for continuous DV refers to observed Y values </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>    mod.ols <span class="ot">&lt;-</span>  <span class="fu">ols</span>(<span class="fu">formula</span>(mod.orm), <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>, <span class="at">data =</span> <span class="fu">eval</span>(data))</span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>  combined_x <span class="ot">&lt;-</span> <span class="fu">fitted</span>(mod.ols)</span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Set cutpoint values for Y</span></span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>  <span class="do">### for factor DV: cutpoints = 2 to max no. of levels (jth levels)</span></span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a>  <span class="do">### for continuous DV: cutpoints = y unique values (quartiles for truly continuous response var)</span></span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(cutval)) {</span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">class</span>(mydv) <span class="sc">%in%</span> <span class="st">&quot;factor&quot;</span>)) cutval <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2</span>, <span class="fu">length</span>(<span class="fu">unique</span>(mydv)))</span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="cf">if</span>( <span class="fu">length</span>(<span class="fu">unique</span>(mydv)) <span class="sc">&lt;=</span> <span class="dv">10</span> ) cutval <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">sort</span>(mydv))[<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> cutval <span class="ot">&lt;-</span> <span class="fu">quantile</span>(<span class="fu">unique</span>(mydv), <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)  <span class="do">## quartiles as cutpoints for continuous DV</span></span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Apply link functions to Prob of Binary Y (defined by cutval)</span></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Regress transformed outcome as a function of combined X. Check for constancy of slopes</span></span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Codes taken from rms p368</span></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (link <span class="cf">in</span> <span class="fu">c</span>(<span class="st">&quot;logit&quot;</span>, <span class="st">&quot;probit&quot;</span>, <span class="st">&quot;cloglog&quot;</span>)) {</span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> cutval) {</span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>      co <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">suppressWarnings</span>(</span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>        <span class="fu">glm</span>(mod.ols<span class="sc">$</span>y <span class="sc">&lt;</span> k <span class="sc">~</span> combined_x, <span class="at">family =</span> <span class="fu">binomial</span>(link))</span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>        ))</span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>      r <span class="ot">&lt;-</span>  <span class="fu">rbind</span>(r, <span class="fu">data.frame</span> (<span class="at">link=</span>link, <span class="at">cut.value =</span> k, <span class="at">slope =</span> <span class="fu">round</span>(co[<span class="dv">2</span>],<span class="dv">2</span>)))</span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;rms-368: glm cloglog on Prob[Y&lt;j] is log-log on Prob{Y&gt;=j} </span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(r, <span class="at">row.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>  <span class="do">### Graphical Assessment</span></span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>  numpred <span class="ot">&lt;-</span> <span class="fu">dim</span>(mod.orm<span class="sc">$</span>x)[[<span class="dv">2</span>]]</span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(<span class="fu">unique</span>(mod.orm<span class="sc">$</span>y)) <span class="sc">&lt;</span> <span class="dv">10</span>) {</span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">ask=</span><span class="cn">TRUE</span>)</span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Generate Score residual plot for each predictor/terms</span></span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>    <span class="do">## n2mfrow() to control par(mfrow) setting</span></span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>    numpred <span class="ot">&lt;-</span> <span class="fu">dim</span>(mod.orm<span class="sc">$</span>x)[[<span class="dv">2</span>]]</span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">rev</span>(grDevices<span class="sc">::</span><span class="fu">n2mfrow</span>(numpred)))</span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>    <span class="fu">resid</span>(mod.orm, <span class="st">&quot;score.binary&quot;</span>, <span class="at">pl=</span><span class="cn">TRUE</span>)</span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">ask=</span>F)</span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
-<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Assess parallelism of link function transformed inverse CDFs curves</span></span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Codes to generate curves are from Harrell&#39;s rms book p368-369</span></span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="cf">function</span> (fun, row, col) {</span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>      f <span class="ot">&lt;-</span>  <span class="fu">substitute</span> (fun)</span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a>      g <span class="ot">&lt;-</span>  <span class="cf">function</span> (F) <span class="fu">eval</span>(f)</span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a>      <span class="do">## Number of groups (2 to 5) based on sample size</span></span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a>      ecdfgroups <span class="ot">=</span> <span class="fu">pmax</span>(<span class="dv">2</span>, <span class="fu">pmin</span>(<span class="dv">5</span>, <span class="fu">round</span>( <span class="fu">dim</span>(mod.orm<span class="sc">$</span>x)[[<span class="dv">1</span>]]<span class="sc">/</span><span class="dv">20</span>)))</span>
-<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a>      y <span class="ot">=</span> mod.orm<span class="sc">$</span>y</span>
-<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Coerce to numeric if needed</span></span>
-<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">is.factor</span>(y)) {</span>
-<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a>        y <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">levels</span>(y))[y]</span>
-<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a>      z <span class="ot">&lt;-</span>  <span class="fu">Ecdf</span> (<span class="sc">~</span> mod.ols<span class="sc">$</span>y,</span>
-<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a>                  <span class="at">groups =</span> <span class="fu">cut2</span>(combined_x, <span class="at">g =</span> ecdfgroups),</span>
-<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fun =</span> <span class="cf">function</span> (F) <span class="fu">g</span>(<span class="dv">1</span> <span class="sc">-</span> F),</span>
-<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlab =</span> <span class="fu">all.vars</span>(mod.ols<span class="sc">$</span>sformula)[[<span class="dv">1</span>]],</span>
-<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ylab =</span> <span class="fu">as.expression</span> (f) ,</span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a>                  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fu">quantile</span>(y, <span class="fl">0.10</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="fu">quantile</span>(y, <span class="fl">0.85</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a>                  <span class="at">label.curve =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>      <span class="fu">print</span> (z, <span class="at">split =</span> <span class="fu">c</span>(col, row, <span class="dv">2</span>, <span class="dv">2</span>) , <span class="at">more =</span> row <span class="sc">&lt;</span> <span class="dv">2</span> <span class="sc">|</span> col <span class="sc">&lt;</span> <span class="dv">2</span>)</span>
-<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span> (<span class="at">fun =</span> <span class="fu">log</span> (F<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>F)), <span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span> (<span class="at">fun =</span> <span class="fu">qnorm</span>(F), <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span> (<span class="at">fun =</span> <span class="fu">log</span> (<span class="sc">-</span><span class="fu">log</span> (<span class="dv">1</span><span class="sc">-</span>F)), <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span>( <span class="at">fun =</span> <span class="sc">-</span><span class="fu">log</span> (<span class="sc">-</span><span class="fu">log</span> (F)), <span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> &quot;Bayesian MZ Rsquared&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> &quot;`r format(Sys.time(), &#39;%d %B, %Y&#39;)`&quot;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> true</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">    html-math-method: katex</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">    self-contained: true</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-location: left</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">  cache: true</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rms)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rmsb)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;scipen&quot;</span><span class="ot">=</span> <span class="dv">4</span>, <span class="at">digits =</span> <span class="dv">4</span>) </span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>R2mz <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, <span class="at">ci =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#&#39; McKelvey &amp; Zavoina (1975) https://doi.org/10/dqfhpp</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">#&#39; Modified from codes written by Andrew Milne (https://github.com/paul-buerkner/brms/issues/639)</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  y_pred  <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">&quot;lp&quot;</span>, <span class="at">posterior.summary =</span> <span class="st">&quot;all&quot;</span>)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  var_fit <span class="ot">&lt;-</span> <span class="fu">apply</span>(y_pred, <span class="dv">1</span>, var)</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  var_res <span class="ot">&lt;-</span> pi<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">3</span> </span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  R2_mz   <span class="ot">&lt;-</span> var_fit <span class="sc">/</span> (var_fit <span class="sc">+</span> var_res)</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">median_hdci</span>(R2_mz, <span class="at">.width =</span> ci)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Short Ordinal Response Variable</span></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>short_orm  <span class="ot">&lt;-</span> <span class="fu">orm</span>(gear   <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">data =</span> mtcars, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>short_blrm <span class="ot">&lt;-</span> <span class="fu">blrm</span>(gear  <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">iter =</span> <span class="dv">3000</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>short_orm</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>short_blrm</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>short_orm<span class="sc">$</span>stats[<span class="fu">grepl</span>(<span class="st">&quot;r2&quot;</span>, <span class="fu">names</span>(short_orm<span class="sc">$</span>stats), <span class="at">ignore.case =</span> <span class="cn">TRUE</span> )]</span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a><span class="fu">R2mz</span>(short_blrm)</span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Long ordinal/continuous Response Variable</span></span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a>long_orm  <span class="ot">&lt;-</span> <span class="fu">orm</span>(mpg   <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">data =</span> mtcars, <span class="at">x =</span> <span class="cn">TRUE</span>, <span class="at">y =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>long_blrm <span class="ot">&lt;-</span> <span class="fu">blrm</span>(mpg  <span class="sc">~</span> am <span class="sc">+</span> disp, <span class="at">iter =</span> <span class="dv">3000</span>, <span class="at">data =</span> mtcars)</span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a>long_orm</span>
+<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>long_blrm</span>
+<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r }</span></span>
+<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: TRUE</span></span>
+<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>long_orm<span class="sc">$</span>stats[<span class="fu">grepl</span>(<span class="st">&quot;r2&quot;</span>, <span class="fu">names</span>(long_orm<span class="sc">$</span>stats), <span class="at">ignore.case =</span> <span class="cn">TRUE</span> )]</span>
+<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a><span class="fu">R2mz</span>(long_blrm)</span>
+<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
